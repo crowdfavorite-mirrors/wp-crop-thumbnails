@@ -22,7 +22,7 @@ class CropPostThumbnailsEditor {
 		$this->cleanWPHead();
 		$failure_msg = '';
 		if(!$this->isUserPermitted()) {
-			$failure_msg = __('An error happend!',CROP_THUMBS_LANG);
+			$failure_msg = __('You are not allowed to do this.',CROP_THUMBS_LANG);
 		} else {
 			switch(true) {
 				case isset($_REQUEST['post_id'])://full programm
@@ -291,7 +291,7 @@ jQuery(document).ready(function($) {
 								<strong><?php echo $img_size_name.$_lowResWarning; ?></strong><?php echo $special_warning; ?>
 								<span class="dimensions"><?php _e('Dimensions:',CROP_THUMBS_LANG) ?> <?php echo $print_dimensions; ?></span>
 								<span class="ratio"><?php _e('Ratio:',CROP_THUMBS_LANG) ?> <?php echo $print_ratio; ?></span>
-								<img src="<?php echo $img_data[0]?>?<?php echo $cache_breaker ?>" data-values='{"name":"<?php echo $img_size_name; ?>","width":<?php echo $value['width']; ?>,"height":<?php echo $value['height']; ?>,"ratio":<?php echo $ratio ?>,"crop":<?php echo $crop ?>}' />
+								<img src="<?php echo $img_data[0]?>?<?php echo $cache_breaker ?>" data-values='{"name":"<?php echo $img_size_name; ?>","width":<?php echo $value['width']; ?>,"height":<?php echo $value['height']; ?>,"ratio":<?php echo number_format($ratio, 13, '.', ''); ?>,"crop":<?php echo $crop ?>}' />
 							</li>
 							<?php endif; ?>
 						<?php endforeach; ?>
@@ -407,7 +407,7 @@ jQuery(document).ready(function($) {
 	
 	function isUserPermitted() {
 		$return = false;
-		if(current_user_can('upload_files') && current_user_can('edit_pages')) {
+		if(current_user_can('upload_files')) {
 			$return = true;
 		}
 		//TODO maybe add noence (is it needed? there are no file- or db-operations)
@@ -461,9 +461,21 @@ jQuery(document).ready(function($) {
 	/**
 	 * Greatest cummon divisor
 	 */
-	function gcd($a, $b){
+	function gcd($a, $b) {
+		if(function_exists('gmp_gcd')) {
+			$gcd = gmp_strval(gmp_gcd($a,$b));
+			$this->addDebug("gcd-version", "gmp_gcd:".$gcd);
+			return ($gcd);
+		} else {
+			$gcd = $this->my_gcd($a,$b);
+			$this->addDebug("gcd-version", "my_gcd:".$gcd);
+			return $gcd;
+		}
+	}
+	
+	function my_gcd($a, $b) {
 		$b = ( $a == 0 )? 0 : $b;
-		return ( $a % $b )? $this->gcd($b, abs($a - $b)) : $b;
+		return ( $a % $b )? $this->my_gcd($b, abs($a - $b)) : $b;
 	}
 	
 	
