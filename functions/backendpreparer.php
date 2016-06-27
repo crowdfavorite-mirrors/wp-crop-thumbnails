@@ -124,10 +124,10 @@ jQuery(document).ready(function($) {
 				var buttonContent = '';
 				buttonContent+= '<a ';
 				buttonContent+= 'class="cropThumbnailBox" href="#" data-cropthumbnail=\'{"image_id":'+ post_id +',"viewmode":"single"}\' ';
-				buttonContent+= 'title="<?php esc_attr_e('Crop Thumbnail',CROP_THUMBS_LANG) ?>"';
+				buttonContent+= 'title="<?php esc_attr_e('Crop Featured Image',CROP_THUMBS_LANG) ?>"';
 				buttonContent+= '>';
 				buttonContent+= '<span class="dashicons dashicons-image-crop" style="color:#82878C;font-size: 14px;vertical-align: middle;"></span>';
-				buttonContent+= '<?php esc_html_e('Crop Thumbnail',CROP_THUMBS_LANG); ?>';
+				buttonContent+= '<?php esc_html_e('Crop Featured Image',CROP_THUMBS_LANG); ?>';
 				buttonContent+= '</a>';
 
 
@@ -170,7 +170,7 @@ jQuery(document).ready(function($) {
 
 		//modal-box dimensions (will not adjust on viewport change)
 		var boxViewportHeight = $(window).height() - <?php echo abs(intval($modal_window_settings['maxHeightOffset'])); ?>;
-		var boxViewportWidth = window.outerWidth - <?php echo abs(intval($modal_window_settings['maxWidthOffset'])); ?>;
+		var boxViewportWidth = $(window).outerWidth() - <?php echo abs(intval($modal_window_settings['maxWidthOffset'])); ?>;
 		
 		<?php echo $jsLimitOutput; ?>
 	
@@ -188,52 +188,51 @@ jQuery(document).ready(function($) {
 		var content = $('<div><iframe src="'+url+'"></iframe></div>');
 		var overlay;
 		var isModalClassInitialSet = $('body').hasClass('modal-open');
-		content.dialog({
-				dialogClass : 'cropThumbnailModal',
-				modal : true,
-				title : $(this).attr('title'),
-				resizable : false,
-				draggable : false,
-				autoOpen : false,
-				closeOnEscape : true,
-				height : boxViewportHeight,
-				width : boxViewportWidth,
-				close : function(event, ui ) {
-					if(overlay!==undefined) {
-						overlay.unbind('click');
-					}
-
-					//remove modal-open class (disable the scrollbars)
-					if(!isModalClassInitialSet) {
-						$('body').removeClass('modal-open');
-					}
-					$(this).dialog('destroy');
-					
-					/**
-					 * We will trigger that the modal of the crop thumbnail is closed.
-					 * So everyone that is up to, could build a cache-breaker on their images.
-					 * HOW-TO cache-break:
-					 * $('body').on('cropThumbnailModalClosed',function() {
-					 *     CROP_THUMBNAILS_DO_CACHE_BREAK( $('.your-image-selector') );
-					 * });
-					 */
-					$('body').trigger('cropThumbnailModalClosed');
-				},
-				open : function(event, ui) {
-					overlay = $('.ui-widget-overlay.ui-front');
-					overlay.click(function() {
-						content.dialog('close');
-					});
-
-					//add body class (disable the scrollbars)
-					$('body').addClass('modal-open');
-
-					//correct the z-index
-					$('.cropThumbnailModal').css('z-index','999999');
-					overlay.css('z-index','999998');
+		
+		var dialogOptions = {
+			dialogClass : 'cropThumbnailModal',
+			modal : true,
+			title : $(this).attr('title'),
+			resizable : false,
+			draggable : false,
+			autoOpen : false,
+			closeOnEscape : true,
+			height : boxViewportHeight,
+			width : boxViewportWidth,
+			close : function(event, ui ) {
+				if(overlay!==undefined) {
+					overlay.unbind('click');
 				}
-			})
-			.dialog('open');
+
+				//remove modal-open class (disable the scrollbars)
+				if(!isModalClassInitialSet) {
+					$('body').removeClass('modal-open');
+				}
+				$(this).dialog('destroy');
+				
+				/**
+				 * We will trigger that the modal of the crop thumbnail is closed.
+				 * So everyone that is up to, could build a cache-breaker on their images.
+				 * HOW-TO cache-break:
+				 * $('body').on('cropThumbnailModalClosed',function() {
+				 *     CROP_THUMBNAILS_DO_CACHE_BREAK( $('.your-image-selector') );
+				 * });
+				 */
+				$('body').trigger('cropThumbnailModalClosed');
+			},
+			open : function(event, ui) {
+				overlay = $('.ui-widget-overlay.ui-front');
+				overlay.addClass('cropThumbnailModalOverlay');
+				overlay.click(function() {
+					content.dialog('close');
+				});
+
+				//add body class (disable the scrollbars)
+				$('body').addClass('modal-open');
+			}
+		};
+		
+		content.dialog(dialogOptions).dialog('open');
 	});
 });
 </script>
@@ -252,12 +251,12 @@ jQuery(document).ready(function($) {
 		if(in_array($post->post_mime_type,$this->allowedMime)) {
 			$html = '';
 			$html.= '<a class="button cropThumbnailBox" href="#" data-cropthumbnail=\'{"image_id":'.$post->ID.',"viewmode":"single"}\' ';
-			$html.= 'title="'.esc_attr__('Crop Thumbnail',CROP_THUMBS_LANG).'">';
-			$html.= '<span class="dashicons dashicons-image-crop" style="color:#82878C;font-size: 14px;vertical-align: middle;"></span>'.esc_html__('Crop Thumbnail',CROP_THUMBS_LANG);
+			$html.= 'title="'.esc_attr__('Crop Featured Image',CROP_THUMBS_LANG).'">';
+			$html.= '<span class="dashicons dashicons-image-crop" style="color:#82878C;font-size: 14px;vertical-align: middle;"></span>'.esc_html__('Crop Featured Image',CROP_THUMBS_LANG);
 			$html.= '</a>';
 
 			$form_fields['cropthumbnails'] = array(
-				'label' => '<small>Crop Thumbnails</small>',//no i18n cause it should be obvious what plugin is used here
+				'label' => '&nbsp;',
 				'input' => 'html',
 				'html' => $html
 			);
