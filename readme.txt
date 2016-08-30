@@ -3,22 +3,22 @@ Contributors: volkmar-kantor
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=volkmar%2ekantor%40gmx%2ede&lc=DE&item_name=Volkmar%20Kantor%20%2d%20totalmedial%2ede&item_number=crop%2dthumbnails&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: post-thumbnails, images, media library
 Requires at least: 4.0
-Tested up to: 4.5
+Tested up to: 4.6
 Stable tag: trunk
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-"Crop Thumbnails" made it easy to get exacly that specific image-detail you want to show in the automatic cropped post-thumbnails.
+"Crop Thumbnails" made it easy to get exacly that specific image-detail you want to show in your featured image or gallery image.
 
 == Description ==
 
-The plugin enhance functionality to crop your automatic cropped post-thumbnails individuell and simple. It add links in the backend to enter all images you had attached to a post, page or custom-post.
-In the Crop-Editor you can choose one or more (if they have the same ratio) imagesizes and cut-off the part of the image you want.
+The plugin enhance functionality to crop your automatic cropped images individuell and simple. It add buttons to the edit-pages and media-dialog to access a crop-editor.
+In the crop-editor you can choose one or more (if they have the same ratio) imagesizes and cut-off the part of the image you want.
 
 = Further Features =
 
 * It is possible to filter the list of available image-sizes (in dependency to post-types) in the settings (Settings > Crop-Thumbnails).
-* You could provide your users a custom style for the Editor-Window.
+* You could provide your users a custom style for the Editor-Window (see F.A.Q.).
 
 == Installation ==
 
@@ -112,14 +112,22 @@ If you fork and planning to publish the forked plugin, please contact me.
 
 == Screenshots ==
 
-1. You have access to Crop-Thumbnails on post / page / custom-post-types.
+1. You have access to the crop-editor on post / page / custom-post-types.
 2. All images attached to this post, will shown in a overlay. You have to choose the one you want to crop.
 3. Choose one or more images (with the same ratio).
-4. Crop-Thumbnails is also integrated in the media library.
+4. The crop-editor is also integrated in the media library.
 5. Choose what image-sizes should be hidden (for what post-types), for better usability.
 6. Quicktest on settings-page, to check if your system is correct setup.
 
 == Changelog ==
+= 0.10.10 =
+* bugfix: Checks if the current page have a featured image box in the first place
+
+= 0.10.9 =
+* bugfix: click on the button in the featured image box (WP 4.6 and above)
+* button in featured image box is no longer visible if no image is choosed
+* minor style improvements
+
 = 0.10.8 =
 * change empty-array-definition to be compatible with old PHP-Versions (prior 5.4)
 
